@@ -48,14 +48,16 @@ exports.genCss = (opts) => {
     defUnit: screenUnit,
   });
 
-  if (sizeMin > sizeMax) {
-    let tmpSizeMax = sizeMax;
-    sizeMax = sizeMin;
-    sizeMin = tmpSizeMax;
+  const comment = `
+      /* size: from ${sizeMin * rootFontSize}px to ${sizeMax * rootFontSize}px
+         screen: between ${screenMin * rootFontSize}px and ${screenMax * rootFontSize}px */
+  `;
 
-    let tmpScreenMax = screenMax;
-    screenMax = screenMin;
-    screenMin = tmpScreenMax;
+  let cSizeMin = sizeMin;
+  let cSizeMax = sizeMax;
+  if (sizeMin > sizeMax) {
+    cSizeMin = sizeMax;
+    cSizeMax = sizeMin;
   }
 
   const r = (screenMin * sizeMax - screenMax * sizeMin) / (screenMin - screenMax);
@@ -63,9 +65,8 @@ exports.genCss = (opts) => {
 
   return {
     'font-size': `
-      /* size: from ${sizeMin * rootFontSize}px to ${sizeMax * rootFontSize}px
-         screen: between ${screenMin * rootFontSize}px and ${screenMax * rootFontSize}px */
-      clamp(${sizeMin}rem, ${v}vw + ${r}rem, ${sizeMax}rem);
+      ${comment}
+      clamp(${cSizeMin}rem, ${v}vw + ${r}rem, ${cSizeMax}rem);
     `,
   };
 };
@@ -77,7 +78,6 @@ exports.genName = (...parts) => {
 exports.parseOptions = (toParse, errSrc = '', defs = {}) => {
   const opts = { ...toParse };
 
-  console.log('before', opts);
   Object.keys(OPTS_SCHEMA).forEach((key) => {
     if (OPTS_SCHEMA[key]) {
       let val = opts[key];
@@ -99,6 +99,5 @@ exports.parseOptions = (toParse, errSrc = '', defs = {}) => {
     }
   });
 
-  console.log('after', opts);
   return opts;
 };
