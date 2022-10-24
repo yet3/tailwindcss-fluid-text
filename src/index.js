@@ -1,11 +1,10 @@
 const plugin = require('tailwindcss/plugin');
 const { genName, genCss, parseOptions, getTextSize } = require('./utils');
-const { OPTS_SCHEMA } = require('./consts');
 
 module.exports = plugin.withOptions(
-  function(options = {}) {
-    return function({ addUtilities, matchUtilities, theme, e }) {
-      const plugOpts = parseOptions(options, OPTS_SCHEMA, 'plugin');
+  function (options = {}) {
+    return function ({ addUtilities, matchUtilities, theme, e }) {
+      const plugOpts = parseOptions(options, 'plugin');
 
       const toGen = [];
       if (plugOpts.generateFromFontSizes) {
@@ -45,30 +44,30 @@ module.exports = plugin.withOptions(
           const split = value.split(',');
           const parsedOpts = parseOptions(
             { ...opts, screenMin: split[0], screenMax: split[1] },
-            OPTS_SCHEMA,
-            `${name}-value: theme`
+            `${name}-value: theme`,
+            plugOpts
           );
           return genCss(parsedOpts);
         };
 
-        const utilOpts = parseOptions(opts, OPTS_SCHEMA, `${name}: theme`);
+        const utilOpts = parseOptions(opts, `${name}: theme`, plugOpts);
         utils[`.${e(name)}`] = genCss(utilOpts);
       });
 
       const generalMatchName = genName();
       match[generalMatchName] = (value) => {
         const split = value.split(',');
+        console.log(split);
 
         const parsedOpts = parseOptions(
           {
-            ...plugOpts,
             sizeMin: split[0],
             sizeMax: split[1],
             screenMin: split[2],
             screenMax: split[3],
           },
-          OPTS_SCHEMA,
-          `${generalMatchName}-${value}: theme`
+          `${generalMatchName}-${value}: theme`,
+          plugOpts
         );
         return genCss(parsedOpts);
       };
@@ -77,7 +76,7 @@ module.exports = plugin.withOptions(
       matchUtilities(match);
     };
   },
-  function() {
+  function () {
     return {
       variants: {
         fluidText: ['responsive'],

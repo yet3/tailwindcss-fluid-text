@@ -1,3 +1,5 @@
+const { OPTS_SCHEMA, REM_REGEX, PX_REGEX } = require('./consts');
+
 exports.getTextSize = (val, defVal = 1) => {
   if (typeof val === 'string' || typeof val === 'number') return val;
   if (Array.isArray(val)) return val[0];
@@ -14,8 +16,8 @@ const toRemValue = (val, { rootFontSize, defUnit }) => {
   if (typeof val === 'string') {
     const parsed = parseFloat(val);
     if (!isNaN(parsed)) {
-      if (/-?[0-9]*r?em/gm.test(val)) return parsed;
-      else if (/-?[0-9]*px/gm.test(val)) return parsed / rootFontSize;
+      if (REM_REGEX.test(val)) return parsed;
+      else if (PX_REGEX.test(val)) return parsed / rootFontSize;
 
       if (defUnit === 'px') return parsed / rootFontSize;
       return parsed;
@@ -26,7 +28,7 @@ const toRemValue = (val, { rootFontSize, defUnit }) => {
 };
 
 exports.genCss = (opts) => {
-  const {fontSizeUnit, screenUnit, rootFontSize} = opts;
+  const { fontSizeUnit, screenUnit, rootFontSize } = opts;
 
   let sizeMin = toRemValue(opts.sizeMin, {
     rootFontSize: rootFontSize,
@@ -59,10 +61,12 @@ exports.genCss = (opts) => {
   const r = (screenMin * sizeMax - screenMax * sizeMin) / (screenMin - screenMax);
   const v = (100 * (sizeMax - sizeMin)) / (screenMax - screenMin);
 
-      // size: from ${sizeMin * rootFontSize}px to ${sizeMax * rootFontSize}px
-      // screen: between ${screenMin * rootFontSize}px and ${screenMax * rootFontSize}px
   return {
-    'font-size': `clamp(${sizeMin}rem, ${v}vw + ${r}rem, ${sizeMax}rem);`
+    'font-size': `
+      /* size: from ${sizeMin * rootFontSize}px to ${sizeMax * rootFontSize}px
+         screen: between ${screenMin * rootFontSize}px and ${screenMax * rootFontSize}px */
+      clamp(${sizeMin}rem, ${v}vw + ${r}rem, ${sizeMax}rem);
+    `,
   };
 };
 
@@ -70,19 +74,31 @@ exports.genName = (...parts) => {
   return ['fluid-text', ...parts].join('-');
 };
 
-exports.parseOptions = (toParse, schema, errSrc = '') => {
+exports.parseOptions = (toParse, errSrc = '', defs = {}) => {
   const opts = { ...toParse };
 
-  Object.keys(schema).forEach((key) => {
-    const val = opts[key];
-    if (val == null) opts[key] = schema[key].value;
-    else if (!schema[key].type.includes(typeof val)) {
-      console.warn(
-        `tailwindcss-fluid-text -> ${errSrc} option '${key}' must be of type: ${schema[key].type.join(' | ')}`
-      );
-      opts[key] = schema[key].value;
+  console.log('before', opts);
+  Object.keys(OPTS_SCHEMA).forEach((key) => {
+    if (OPTS_SCHEMA[key]) {
+      let val = opts[key];
+      if (val == null) {
+        if (defs[key] != null) val = defs[key];
+        else val = OPTS_SCHEMA[key].value;
+      }
+
+      if (!OPTS_SCHEMA[key].type.includes(typeof val)) {
+        console.warn(
+          `tailwindcss-fluid-text -> ${errSrc} option '${key}' must be of type: ${OPTS_SCHEMA[key].type.join(' | ')}`
+        );
+        val = OPTS_SCHEMA[key].value;
+      } else if (OPTS_SCHEMA[key].regex && typeof val === 'string' && !OPTS_SCHEMA[key].regex.test(val)) {
+        console.warn(`tailwindcss-fluid-text -> ${errSrc} option '${key}' must match regex: ${OPTS_SCHEMA[key].regex}`);
+        val = OPTS_SCHEMA[key].value;
+      }
+      opts[key] = val;
     }
   });
 
+  console.log('after', opts);
   return opts;
 };
