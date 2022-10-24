@@ -1,0 +1,33 @@
+{
+  "name": "@yet3/tailwindcss-fluid-text",
+  "version": "1.0.0",
+  "description": "TailwindCss plugin that adds fluid typography",
+  "author": "yet3",
+  "license": "MIT",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "keywords": [
+    "typography",
+    "fluid",
+    "tailwind",
+    "tailwindcss",
+    "tailwindcss-plugin",
+    "plugin",
+    "css"
+  ],
+  "devDependencies": {
+    "prettier": "^2.7.1",
+    "tailwindcss": "^3.1.8"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yet3/tailwindcss-fluid-text.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yet3/tailwindcss-fluid-text/issues"
+  },
+  "homepage": "https://github.com/yet3/tailwindcss-fluid-text#readme"
+}
