@@ -92,7 +92,9 @@ exports.parseOptions = (toParse, errSrc = '', defs = {}) => {
         );
         val = OPTS_SCHEMA[key].value;
       } else if (OPTS_SCHEMA[key].regex && typeof val === 'string' && !OPTS_SCHEMA[key].regex.test(val)) {
-        console.warn(`tailwindcss-fluid-text -> ${errSrc} option '${key}' must match regex: ${OPTS_SCHEMA[key].regex}`);
+        console.warn(
+          `tailwindcss-fluid-text -> ${errSrc} option '${key}' value: ${val} must match regex: ${OPTS_SCHEMA[key].regex}`
+        );
         val = OPTS_SCHEMA[key].value;
       }
       opts[key] = val;

@@ -44,7 +44,7 @@ module.exports = plugin.withOptions(
           const split = value.split(',');
           const parsedOpts = parseOptions(
             { ...opts, screenMin: split[0], screenMax: split[1] },
-            `${name}-value: theme`,
+            `${name}-[${value}]: theme`,
             plugOpts
           );
           return genCss(parsedOpts);
@@ -66,7 +66,7 @@ module.exports = plugin.withOptions(
             screenMin: split[2],
             screenMax: split[3],
           },
-          `${generalMatchName}-${value}: theme`,
+          `${generalMatchName}-[${value}]: theme`,
           plugOpts
         );
         return genCss(parsedOpts);
