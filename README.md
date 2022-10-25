@@ -1,6 +1,20 @@
 # TailwindCSS fluid text
+![GitHub license](https://img.shields.io/github/license/yet3/tailwindcss-fluid-text?style=flat)
+<a href='https://www.npmjs.com/package/@yet3/tailwindcss-fluid-text'>
+  ![npm](https://img.shields.io/npm/v/@yet3/tailwindcss-fluid-text)
+</a>
 
 A plugin that adds fluid typography to [TailwindCss](https://tailwindcss.com)
+
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#basic-usage)
+  - [Basic](#basic-usage)
+  - [Arbitrary values](#arbitrary-values)
+- [Options](#options)
+- [Config example](#config-example)
+- [Live demo](https://play.tailwindcss.com/6Nk8Wbs1BZ)
+- [Inspired by](#inspired-by)
 
 ## Installation
 
@@ -36,7 +50,7 @@ module.exports = {
 <div class="fluid-text-lg-sm">
 ```
 
-## Arbitrary values
+### Arbitrary values
 
 ```html
 <!-- fluid-text-xs-base-[screenMin,screenMax]   -->
@@ -54,7 +68,7 @@ module.exports = {
 <div class="fluid-text-[2,2.5]">
 ```
 
-## Plugin options
+## Options
 
 |          Name         |      Type      | Default value |     Example value     |                                                          Description                                                         |
 |:---------------------:|:--------------:|:-------------:|:---------------------:|:----------------------------------------------------------------------------------------------------------------------------:|
@@ -67,7 +81,7 @@ module.exports = {
 |      rootFontSize     |     number     |       16      |       16, 24, 32      | Font size of root element in pixels (1rem = ?px)                                                                             |
 | generateFromFontSizes |     boolean    |      true     |      true, false      | Whether plugin should generate fluid-text utilities from fontSizes configured in tailwind. (can only be used in plugin options)                     |
 
-## Full config example
+## Config example
 
 ```js
 /** @type {import('tailwindcss').Config} */
@@ -106,6 +120,9 @@ module.exports = {
   ],
 };
 ```
+
+## Live demo
+[Play around on TailwindPlay](https://play.tailwindcss.com/6Nk8Wbs1BZ)
 
 ## Inspired by
 
