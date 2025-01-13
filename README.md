@@ -1,3 +1,4 @@
+Don't bother with this just use [fluid-tailwind](https://github.com/barvian/fluid-tailwind) it's awesome :+1:
 # TailwindCSS fluid text
 ![GitHub license](https://img.shields.io/github/license/yet3/tailwindcss-fluid-text?style=flat)
 <a href='https://www.npmjs.com/package/@yet3/tailwindcss-fluid-text'>
